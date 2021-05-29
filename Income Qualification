@@ -1,0 +1,260 @@
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+%matplotlib inline
+sns.set()
+import warnings
+warnings.filterwarnings('ignore')
+Income_train=pd.read_csv('train_income.csv')
+Income_test=pd.read_csv('test_income.csv')
+Income_train.head()
+Income_test.head()
+dir(Income_train)
+print('Shape of train dataset is {}'.format(Income_train.shape))
+print('Shape of test dataset is {}'.format(Income_test.shape))
+for i in Income_train.columns:
+    if i not in Income_test.columns:
+        print("Our Target variable is {}".format(i))
+print(Income_train.dtypes.value_counts())
+print(Income_train.info())
+#lets explore each different types of datasets
+for i in Income_train.columns:
+    a=Income_train[i].dtype
+    if a == 'object':
+        print(i)
+# lets drop Id variable.
+
+Income_train.drop(['Id','idhogar'],axis=1,inplace=True)
+Income_train['dependency'].value_counts()
+def map(i):
+    
+    if i=='yes':
+        return(float(1))
+    elif i=='no':
+        return(float(0))
+    else:
+        return(float(i))
+ Income_train['dependency']=Income_train['dependency'].apply(map)
+ for i in Income_train.columns:
+    a=Income_train[i].dtype
+    if a == 'object':
+        print(i)
+ Income_train.info()
+ Income_train['edjefe']=Income_train['edjefe'].apply(map)
+Income_train['edjefa']=Income_train['edjefa'].apply(map)
+Income_train.info()
+var_df=pd.DataFrame(np.var(Income_train,0),columns=['variance'])
+var_df.sort_values(by='variance').head(15)
+print('Below are columns with variance 0.')
+col=list((var_df[var_df['variance']==0]).index)
+print(col)
+contingency_tab=pd.crosstab(Income_train['r4t3'],Income_train['hogar_total'])
+Observed_Values=contingency_tab.values
+import scipy.stats
+b=scipy.stats.chi2_contingency(contingency_tab)
+Expected_Values = b[3]
+no_of_rows=len(contingency_tab.iloc[0:2,0])
+no_of_columns=len(contingency_tab.iloc[0,0:2])
+df=(no_of_rows-1)*(no_of_columns-1)
+print("Degree of Freedom:-",df)
+from scipy.stats import chi2
+chi_square=sum([(o-e)**2./e for o,e in zip(Observed_Values,Expected_Values)])
+chi_square_statistic=chi_square[0]+chi_square[1]
+print("chi-square statistic:-",chi_square_statistic)
+alpha=0.05
+critical_value=chi2.ppf(q=1-alpha,df=df)
+print('critical_value:',critical_value)
+p_value=1-chi2.cdf(x=chi_square_statistic,df=df)
+print('p-value:',p_value)
+print('Significance level: ',alpha)
+print('Degree of Freedom: ',df)
+print('chi-square statistic:',chi_square_statistic)
+print('critical_value:',critical_value)
+print('p-value:',p_value)
+if chi_square_statistic>=critical_value:
+    print("Reject H0,There is a relationship between 2 categorical variables")
+else:
+    print("Retain H0,There is no relationship between 2 categorical variables")
+    
+if p_value<=alpha:
+    print("Reject H0,There is a relationship between 2 categorical variables")
+else:
+    print("Retain H0,There is no relationship between 2 categorical variables")
+contingency_tab=pd.crosstab(Income_train['tipovivi3'],Income_train['v2a1'])
+Observed_Values=contingency_tab.values
+import scipy.stats
+b=scipy.stats.chi2_contingency(contingency_tab)
+Expected_Values = b[3]
+no_of_rows=len(contingency_tab.iloc[0:2,0])
+no_of_columns=len(contingency_tab.iloc[0,0:2])
+df=(no_of_rows-1)*(no_of_columns-1)
+print("Degree of Freedom:-",df)
+from scipy.stats import chi2
+chi_square=sum([(o-e)**2./e for o,e in zip(Observed_Values,Expected_Values)])
+chi_square_statistic=chi_square[0]+chi_square[1]
+print("chi-square statistic:-",chi_square_statistic)
+alpha=0.05
+critical_value=chi2.ppf(q=1-alpha,df=df)
+print('critical_value:',critical_value)
+p_value=1-chi2.cdf(x=chi_square_statistic,df=df)
+print('p-value:',p_value)
+print('Significance level: ',alpha)
+print('Degree of Freedom: ',df)
+print('chi-square statistic:',chi_square_statistic)
+print('critical_value:',critical_value)
+print('p-value:',p_value)
+if chi_square_statistic>=critical_value:
+    print("Reject H0,There is a relationship between 2 categorical variables")
+else:
+    print("Retain H0,There is no relationship between 2 categorical variables")
+if p_value<=alpha:
+    print("Reject H0,There is a relationship between 2 categorical variables")
+else:
+    print("Retain H0,There is no relationship between 2 categorical variables")
+contingency_tab=pd.crosstab(Income_train['v18q'],Income_train['v18q1'])
+Observed_Values=contingency_tab.values
+import scipy.stats
+b=scipy.stats.chi2_contingency(contingency_tab)
+Expected_Values = b[3]
+no_of_rows=len(contingency_tab.iloc[0:2,0])
+no_of_columns=len(contingency_tab.iloc[0,0:2])
+df=(no_of_rows-1)*(no_of_columns-1)
+print("Degree of Freedom:-",df)
+from scipy.stats import chi2
+chi_square=sum([(o-e)**2./e for o,e in zip(Observed_Values,Expected_Values)])
+chi_square_statistic=chi_square[0]+chi_square[1]
+print("chi-square statistic:-",chi_square_statistic)
+alpha=0.05
+critical_value=chi2.ppf(q=1-alpha,df=df)
+print('critical_value:',critical_value)
+p_value=1-chi2.cdf(x=chi_square_statistic,df=df)
+print('p-value:',p_value)
+print('Significance level: ',alpha)
+print('Degree of Freedom: ',df)
+print('chi-square statistic:',chi_square_statistic)
+print('critical_value:',critical_value)
+print('p-value:',p_value)
+if chi_square_statistic>=critical_value:
+    print("Reject H0,There is a relationship between 2 categorical variables")
+else:
+    print("Retain H0,There is no relationship between 2 categorical variables")
+    
+if p_value<=alpha:
+    print("Reject H0,There is a relationship between 2 categorical variables")
+else:
+    print("Retain H0,There is no relationship between 2 categorical variables")
+Income_train.drop('r4t3',axis=1,inplace=True)
+Income_train.parentesco1.value_counts()
+pd.crosstab(Income_train['edjefa'],Income_train['edjefe'])
+Income_train.isna().sum().value_counts()
+Income_train['Target'].isna().sum()
+float_col=[]
+for i in Income_train.columns:
+    a=Income_train[i].dtype
+    if a == 'float64':
+        float_col.append(i)
+print(float_col)
+Income_train[float_col].isna().sum()
+Income_train['v18q1'].value_counts()
+pd.crosstab(Income_train['tipovivi1'],Income_train['v2a1'])
+pd.crosstab(Income_train['v18q1'],Income_train['v18q'])
+Income_train['v2a1'].fillna(0,inplace=True)
+Income_train['v18q1'].fillna(0,inplace=True)
+Income_train.drop(['tipovivi3', 'v18q','rez_esc','elimbasu5'],axis=1,inplace=True)
+Income_train['meaneduc'].fillna(np.mean(Income_train['meaneduc']),inplace=True)
+Income_train['SQBmeaned'].fillna(np.mean(Income_train['SQBmeaned']),inplace=True)
+print(Income_train.isna().sum().value_counts())
+int_col=[]
+for i in Income_train.columns:
+    a=Income_train[i].dtype
+    if a == 'int64':
+        int_col.append(i)
+print(int_col)
+Income_train[int_col].isna().sum().value_counts()
+Income_train.isna().sum().value_counts()
+Income_train.Target.value_counts()
+Poverty_level=Income_train[Income_train['v2a1'] !=0]
+Poverty_level.shape
+poverty_level=Poverty_level.groupby('area1')['v2a1'].apply(np.median)
+poverty_level
+def povert(x):
+    if x<8000:
+        return('Below poverty level')
+    
+    elif x>140000:
+        return('Above poverty level')
+    elif x<140000:
+        return('Below poverty level: Ur-ban ; Above poverty level : Rural ')
+c=Poverty_level['v2a1'].apply(povert)
+c.shape
+pd.crosstab(c,Poverty_level['area1'])
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import train_test_split
+X_data=Income_train.drop('Target',axis=1)
+Y_data=Income_train.Target
+X_data_col=X_data.columns
+from sklearn.preprocessing import StandardScaler
+SS=StandardScaler()
+X_data_1=SS.fit_transform(X_data)
+X_data_1=pd.DataFrame(X_data_1,columns=X_data_col)
+X_train,X_test,Y_train,Y_test=train_test_split(X_data_1,Y_data,test_size=0.25,stratify=Y_data,random_state=0)
+from sklearn.pipeline import Pipeline
+from sklearn.model_selection import GridSearchCV
+
+rfc=RandomForestClassifier(random_state=0)
+parameters={'n_estimators':[10,50,100,300],'max_depth':[3,5,10,15]}
+grid=zip([rfc],[parameters])
+
+best_=None
+
+for i, j in grid:
+    a=GridSearchCV(i,param_grid=j,cv=3,n_jobs=1)
+    a.fit(X_train,Y_train)
+    if best_ is None:
+        best_=a
+    elif a.best_score_>best_.best_score_:
+        best_=a
+        
+        
+print ("Best CV Score",best_.best_score_)
+print ("Model Parameters",best_.best_params_)
+print("Best Estimator",best_.best_estimator_)
+RFC=best_.best_estimator_
+Model=RFC.fit(X_train,Y_train)
+pred=Model.predict(X_test)
+print('Model Score of train data : {}'.format(Model.score(X_train,Y_train)))
+print('Model Score of test data : {}'.format(Model.score(X_test,Y_test)))
+Important_features=pd.DataFrame(Model.feature_importances_,X_data_col,columns=['feature_importance'])
+Top50Features=Important_features.sort_values(by='feature_importance',ascending=False).head(50).index
+Top50Features
+for i in Top50Features:
+    if i not in X_data_col:
+        print(i)
+X_data_Top50=X_data[Top50Features]
+X_train,X_test,Y_train,Y_test=train_test_split(X_data_Top50,Y_data,test_size=0.25,stratify=Y_data,random_state=0)
+Model_1=RFC.fit(X_train,Y_train)
+pred=Model_1.predict(X_test)
+from sklearn.metrics import confusion_matrix,f1_score,accuracy_score
+confusion_matrix(Y_test,pred)
+f1_score(Y_test,pred,average='weighted')
+accuracy_score(Y_test,pred)
+# lets drop Id variable.
+Income_test.drop('r4t3',axis=1,inplace=True)
+Income_test.drop(['Id','idhogar'],axis=1,inplace=True)
+Income_test['dependency']=Income_test['dependency'].apply(map)
+Income_test['edjefe']=Income_test['edjefe'].apply(map)
+Income_test['edjefa']=Income_test['edjefa'].apply(map)
+Income_test['v2a1'].fillna(0,inplace=True)
+Income_test['v18q1'].fillna(0,inplace=True)
+Income_test.drop(['tipovivi3', 'v18q','rez_esc','elimbasu5'],axis=1,inplace=True)
+Income_train['meaneduc'].fillna(np.mean(Income_train['meaneduc']),inplace=True)
+Income_train['SQBmeaned'].fillna(np.mean(Income_train['SQBmeaned']),inplace=True)
+Income_test_data=Income_test[Top50Features]
+Income_test_data.isna().sum().value_counts()
+Income_test_data.SQBmeaned.fillna(np.mean(Income_test_data['SQBmeaned']),inplace=True)
+Income_test_data.meaneduc.fillna(np.mean(Income_test_data['meaneduc']),inplace=True)
+Test_data_1=SS.fit_transform(Income_test_data)
+X_data_1=pd.DataFrame(Test_data_1)
+test_prediction=Model_1.predict(Income_test_data)
+test_prediction
